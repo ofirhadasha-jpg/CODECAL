@@ -649,8 +649,8 @@
             const chatForm = document.getElementById('chat-form');
             const chatInput = document.getElementById('chat-input');
 
-            const NVIDIA_KEY = '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';
-            const NVIDIA_URL = 'https://integrate.api.nvidia.com/v1/chat/completions';
+            // Use Netlify proxy to avoid CORS and protect API key
+            const PROXY_URL = '/api/nvidia-chat';
 
             // Site context for the AI
             const SITE_CONTEXT = `אתה עוזר מידע לאתר "Galil 360" - רובע עסקי חדש לעסקים והייטק בנהריה. הנה המידע הרלוונטי מהאתר:
@@ -753,40 +753,33 @@
                 if (el) el.remove();
             }
 
-            // Send to NVIDIA API
+            // Send via Netlify proxy to NVIDIA API
             async function sendToNVIDIA(userMessage) {
                 showTyping();
                 
                 try {
-                    const response = await fetch(NVIDIA_URL, {
+                    const response = await fetch(PROXY_URL, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + NVIDIA_KEY
+                            'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            model: 'meta/llama-3.3-70b-instruct',
-                            messages: [
-                                { role: 'system', content: SITE_CONTEXT },
-                                { role: 'user', content: userMessage }
-                            ],
-                            temperature: 0.7,
-                            max_tokens: 500,
-                            top_p: 1
+                            message: userMessage
                         })
                     });
 
                     hideTyping();
 
                     if (!response.ok) {
-                        const errText = await response.text();
-                        console.error('NVIDIA API error:', response.status, errText);
+                        const data = await response.json().catch(() => ({}));
+                        const errMsg = data.error || 'שגיאה בחיבור למערכת';
+                        console.error('Proxy error:', response.status, errMsg);
                         addMessage('מצטער, אירעה שגיאה בחיבור למערכת. אנא נסה שוב מאוחר יותר.', false);
                         return;
                     }
 
                     const data = await response.json();
-                    const reply = data.choices?.[0]?.message?.content || 'לא הצלחתי להפיק תשובה. אנא נסה שוב.';
+                    const reply = data.reply || 'לא הצלחתי להפיק תשובה. אנא נסה שוב.';
                     addMessage(reply, false);
 
                 } catch (error) {

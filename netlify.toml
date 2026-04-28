@@ -1,0 +1,10 @@
+[build]
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/api/nvidia-chat"
+  to = "/.netlify/functions/nvidia-chat"
+  status = 200
