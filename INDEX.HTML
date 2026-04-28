@@ -446,6 +446,49 @@
 
     </div> <!-- End Main Wrapper -->
 
+    <!-- Chatbot Widget -->
+    <div class="fixed bottom-6 right-6 z-[100]">
+        <!-- Chat Window -->
+        <div id="chat-window" class="hidden absolute bottom-20 right-0 bg-white shadow-2xl rounded-2xl w-80 sm:w-96 border border-gray-100 text-[#1F3F84] overflow-hidden flex flex-col" style="height: 450px; max-height: calc(100vh - 160px);">
+            <!-- Header -->
+            <div class="bg-[#1F3F84] text-white p-4 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="bot" class="w-5 h-5 text-[#35E59A]"></i>
+                    <span class="font-bold text-sm">Galil 360 Bot</span>
+                </div>
+                <button id="chat-close" class="hover:text-[#35E59A] transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <!-- Messages -->
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 bg-[#E6EAF2]/50">
+                <div class="flex items-start gap-2">
+                    <div class="bg-[#35E59A] text-white p-2 rounded-full shrink-0 w-8 h-8 flex items-center justify-center">
+                        <i data-lucide="bot" class="w-4 h-4"></i>
+                    </div>
+                    <div class="bg-white p-3 rounded-2xl rounded-tr-none shadow-sm text-sm text-gray-700">
+                        היי! 👋 אני הבוט של Galil 360. אשמח לענות על כל שאלה לגבי הפרויקט, הפארק, נהריה, ועוד. במה אוכל לעזור?
+                    </div>
+                </div>
+            </div>
+            <!-- Input -->
+            <div class="p-3 border-t border-gray-100 bg-white">
+                <form id="chat-form" class="flex gap-2">
+                    <input type="text" id="chat-input" placeholder="כתוב שאלה..." class="flex-1 px-4 py-2 rounded-full border border-gray-200 focus:outline-none focus:border-[#35E59A] text-sm text-right" autocomplete="off" />
+                    <button type="submit" class="bg-[#35E59A] text-[#1F3F84] p-2 rounded-full hover:bg-[#2bc483] transition-colors shrink-0">
+                        <i data-lucide="send" class="w-5 h-5"></i>
+                    </button>
+                </form>
+                <p class="text-xs text-gray-400 text-center mt-1">מופעל באמצעות NVIDIA AI</p>
+            </div>
+        </div>
+
+        <!-- Toggle Button -->
+        <button id="chat-toggle" class="bg-gradient-to-br from-[#35E59A] to-[#1F3F84] text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-all border-2 border-white/20 flex items-center justify-center" aria-label="פתח צאט">
+            <i data-lucide="bot" class="w-7 h-7"></i>
+        </button>
+    </div>
+
     <!-- Accessibility Widget -->
     <div class="fixed bottom-6 left-6 z-[100]">
         
@@ -595,6 +638,178 @@
         });
 
     </script>
+
+    <!-- Chatbot Logic - NVIDIA API -->
+    <script>
+        (function() {
+            const chatWindow = document.getElementById('chat-window');
+            const chatToggle = document.getElementById('chat-toggle');
+            const chatClose = document.getElementById('chat-close');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatForm = document.getElementById('chat-form');
+            const chatInput = document.getElementById('chat-input');
+
+            const NVIDIA_KEY = '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';
+            const NVIDIA_URL = 'https://integrate.api.nvidia.com/v1/chat/completions';
+
+            // Site context for the AI
+            const SITE_CONTEXT = `אתה עוזר מידע לאתר "Galil 360" - רובע עסקי חדש לעסקים והייטק בנהריה. הנה המידע הרלוונטי מהאתר:
+
+            Galil 360 - Health & Technology District, נהריה.
+            הרובע העסקי החדש של הצפון. פיתוח בעיצומו, מגרשים לשיווק ויזמות במיקום האסטרטגי ביותר בגליל.
+
+            נהריה כבסיס כלכלי איתן: העיר נהריה עוברת מהפכה כלכלית ואורבנית והופכת לבירת ההייטק והרפואה של הצפון. העיר מהווה בסיס כלכלי יציב וצומח, עם השקעות עתק בתשתיות, חינוך ופיתוח סביבתי.
+
+            GALIL 360 מסמל את המעבר האסטרטגי של העיר ממודל תעשייתי מסורתי למרכז חדשנות עולמי מבוסס ידע. שיתוף הפעולה הייחודי בין הרשות המקומית, המרכז הרפואי לגליל והאקדמיה יוצר אקו-סיסטם מושלם לצמיחה עסקית.
+
+            יתרונות הפארק:
+            1. נגישות תחבורתית - מיקום אידיאלי בסמוך לתחנת הרכבת, כביש 4, וכביש 6 העתידי.
+            2. חיבור למרכז רפואי - קרבה וסינרגיה חסרת תקדים עם המרכז הרפואי לגליל, אקו-סיסטם לחברות MedTech ו-BioTech.
+            3. תמריצים ממשלתיים - הפארק ממוקם באזור פיתוח א', מענקי השקעה מהמדינה, הטבות מס משמעותיות, ותמריצים להעסקת עובדים.
+
+            סטטוס: פיתוח בעיצומו. התוכניות מאושרות והקרקעות מוכנות לשיווק מיידי.
+
+            תפיסת עיר 5 דקות: מרחב מעורב שימושים המשלב תעסוקה, מסחר, פנאי ושירותים קהילתיים במרחק הליכה קצר.
+
+            איכות חיים: נהריה מציעה עיר חוף תוססת, קהילה איכותית וחיי פנאי עשירים - איזון אמיתי בין קריירה לחיים האישיים.
+
+            קהלי יעד: יזמים וקבלנים, חברות טכנולוגיה ורפואה, משקיעים מוסדיים ופרטיים.
+
+            מנהלת היישום כוללת: ראש העיר נהריה (יו"ר מנהלת הפארק), מנהל המרכז הרפואי (שותף אסטרטגי), מנכ"ל החברה הכלכלית (ניהול ופיתוח), מנהלת הפארקים (ליווי יזמים ופניות).
+
+            חברי מנהלת: דימיטרי אפשטיין (ראש מנהלת, סגן ראש העיר), עו"ד דוד אלחייאני (מנכ"ל עיריית נהריה), טל חמי (מהנדס העיר), מיכה זנו (גזבר העירייה), מר רונן גרשטיין, מר עוז כץ, גב' נדיה פאעור (צוות אסטרטגי).
+
+            ליצירת קשר וקביעת פגישה: benabuhila@gmail.com
+
+            תענה בעברית, בקצרה ולעניין, עד 4-5 משפטים. היה ידידותי ומקצועי.`;
+
+            let isOpen = false;
+
+            function toggleChat() {
+                isOpen = !isOpen;
+                if (isOpen) {
+                    chatWindow.classList.remove('hidden');
+                    chatInput.focus();
+                } else {
+                    chatWindow.classList.add('hidden');
+                }
+            }
+
+            chatToggle.addEventListener('click', toggleChat);
+            chatClose.addEventListener('click', toggleChat);
+
+            // Add message to chat
+            function addMessage(text, isUser) {
+                const div = document.createElement('div');
+                div.className = 'flex items-start gap-2 ' + (isUser ? 'flex-row-reverse' : '');
+                
+                if (isUser) {
+                    div.innerHTML = `
+                        <div class="bg-[#1F3F84] text-white p-2 rounded-full shrink-0 w-8 h-8 flex items-center justify-center">
+                            <i data-lucide="user" class="w-4 h-4"></i>
+                        </div>
+                        <div class="bg-[#1F3F84] text-white p-3 rounded-2xl rounded-tl-none shadow-sm text-sm">
+                            ${escapeHtml(text)}
+                        </div>`;
+                } else {
+                    div.innerHTML = `
+                        <div class="bg-[#35E59A] text-[#1F3F84] p-2 rounded-full shrink-0 w-8 h-8 flex items-center justify-center">
+                            <i data-lucide="bot" class="w-4 h-4"></i>
+                        </div>
+                        <div class="bg-white p-3 rounded-2xl rounded-tr-none shadow-sm text-sm text-gray-700">
+                            ${escapeHtml(text)}
+                        </div>`;
+                }
+                chatMessages.appendChild(div);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                lucide.createIcons();
+            }
+
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML.replace(/\n/g, '<br>');
+            }
+
+            // Show typing indicator
+            function showTyping() {
+                const div = document.createElement('div');
+                div.id = 'typing-indicator';
+                div.className = 'flex items-start gap-2';
+                div.innerHTML = `
+                    <div class="bg-[#35E59A] text-[#1F3F84] p-2 rounded-full shrink-0 w-8 h-8 flex items-center justify-center">
+                        <i data-lucide="bot" class="w-4 h-4"></i>
+                    </div>
+                    <div class="bg-white p-3 rounded-2xl rounded-tr-none shadow-sm text-sm text-gray-400">
+                        <span class="animate-pulse">...</span>
+                    </div>`;
+                chatMessages.appendChild(div);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                lucide.createIcons();
+            }
+
+            function hideTyping() {
+                const el = document.getElementById('typing-indicator');
+                if (el) el.remove();
+            }
+
+            // Send to NVIDIA API
+            async function sendToNVIDIA(userMessage) {
+                showTyping();
+                
+                try {
+                    const response = await fetch(NVIDIA_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + NVIDIA_KEY
+                        },
+                        body: JSON.stringify({
+                            model: 'meta/llama-3.3-70b-instruct',
+                            messages: [
+                                { role: 'system', content: SITE_CONTEXT },
+                                { role: 'user', content: userMessage }
+                            ],
+                            temperature: 0.7,
+                            max_tokens: 500,
+                            top_p: 1
+                        })
+                    });
+
+                    hideTyping();
+
+                    if (!response.ok) {
+                        const errText = await response.text();
+                        console.error('NVIDIA API error:', response.status, errText);
+                        addMessage('מצטער, אירעה שגיאה בחיבור למערכת. אנא נסה שוב מאוחר יותר.', false);
+                        return;
+                    }
+
+                    const data = await response.json();
+                    const reply = data.choices?.[0]?.message?.content || 'לא הצלחתי להפיק תשובה. אנא נסה שוב.';
+                    addMessage(reply, false);
+
+                } catch (error) {
+                    hideTyping();
+                    console.error('Network error:', error);
+                    addMessage('מצטער, אירעה שגיאה בחיבור לאינטרנט. אנא בדוק את החיבור ונסה שוב.', false);
+                }
+            }
+
+            // Handle form submit
+            chatForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const msg = chatInput.value.trim();
+                if (!msg) return;
+
+                addMessage(msg, true);
+                chatInput.value = '';
+                sendToNVIDIA(msg);
+            });
+
+        })();
+    </script>
+
 </body>
 </html>
 
