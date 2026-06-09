@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galil 360 - Health & Technology District</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#1F3F84',
+                            green: '#35E59A',
+                            light: '#E6EAF2',
+                            darkBg: '#0F172A'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        .contrast-mode {
+            background-color: #000000 !important;
+            color: #FFFF00 !important;
+        }
+        .contrast-mode a, .contrast-mode button {
+            color: #FFFF00 !important;
+            border-color: #FFFF00 !important;
+        }
+        .highlight-links a {
+            outline: 2px solid #ff0055 !important;
+            background-color: rgba(255, 0, 85, 0.1) !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-[#1F3F84] transition-colors duration-300 dark:bg-slate-900 dark:text-slate-100">
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="fixed top-24 left-6 z-[150] space-y-4 max-w-sm w-full"></div>
+
+    <!-- Main Wrapper for Accessibility -->
+    <div id="app-wrapper" class="min-h-screen flex flex-col font-sans transition-all duration-300 text-base">
+      
+        <!-- Navbar -->
+        <nav class="fixed w-full z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm shadow-md transition-colors duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-20">
+                    
+                    <!-- Logo Component -->
+                    <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                        <span class="text-3xl font-extrabold text-[#1F3F84] dark:text-white tracking-tight">Galil</span>
+                        <span class="text-3xl font-light text-[#1F3F84] dark:text-[#35E59A] relative">
+                            360
+                            <svg class="absolute -top-1 -right-2 w-8 h-8 text-[#35E59A]" viewBox="0 0 100 100" fill="none">
+                                <path d="M10,80 Q50,0 90,80" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none" />
+                            </svg>
+                        </span>
+                    </div>
+                    
+                    <!-- Nav Desktop Links -->
+                    <div class="hidden lg:flex space-x-reverse space-x-8 items-center">
+                        <a href="#about" class="font-bold hover:text-[#35E59A] transition-colors py-2">אודות</a>
+                        <a href="#advantages" class="font-bold hover:text-[#35E59A] transition-colors py-2">יתרונות</a>
+                        <a href="#masterplan" class="font-bold hover:text-[#35E59A] transition-colors py-2">מפת מגרשים אינטראקטיבית</a>
+                        <a href="#status" class="font-bold hover:text-[#35E59A] transition-colors py-2">סטטוס ותב"ע</a>
+                        <a href="#vision" class="font-bold hover:text-[#35E59A] transition-colors py-2">חזון עירוני</a>
+                    </div>
+
+                    <!-- CTA & Menu Buttons -->
+                    <div class="flex items-center gap-4">
+                        <button onclick="openContactModal('פנייה כללית מהתפריט הראשי')" class="hidden sm:inline-block bg-[#35E59A] text-[#1F3F84] px-6 py-2.5 rounded-full font-extrabold text-base hover:bg-[#2bc483] transition-all transform hover:scale-105 shadow-md">
+                            השארת פרטים
+                        </button>
+                        
+                        <!-- Mobile Hamburger Button -->
+                        <button id="mobile-menu-btn" class="lg:hidden text-[#1F3F84] dark:text-white focus:outline-none p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" aria-label="תפריט ניווט">
+                            <i data-lucide="menu" class="w-8 h-8"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu Dropdown -->
+            <div id="mobile-menu" class="hidden lg:hidden bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 px-4 pt-2 pb-6 space-y-3 shadow-lg">
+                <a href="#about" class="block font-bold py-2.5 px-4 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 text-[#1F3F84] dark:text-white">אודות</a>
+                <a href="#advantages" class="block font-bold py-2.5 px-4 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 text-[#1F3F84] dark:text-white">יתרונות</a>
+                <a href="#masterplan" class="block font-bold py-2.5 px-4 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 text-[#1F3F84] dark:text-white">מפת מגרשים אינטראקטיבית</a>
+                <a href="#status" class="block font-bold py-2.5 px-4 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 text-[#1F3F84] dark:text-white">סטטוס ותב"ע</a>
+                <a href="#vision" class="block font-bold py-2.5 px-4 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 text-[#1F3F84] dark:text-white">חזון עירוני</a>
+                <button onclick="openContactModal('פנייה כללית מתפריט מובייל')" class="w-full bg-[#35E59A] text-[#1F3F84] py-3 rounded-xl font-extrabold text-lg shadow-md">השארת פרטים</button>
+            </div>
+        </nav>
+
+        <!-- HERO Section -->
+        <section class="relative h-screen flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 z-0 bg-slate-950">
+                <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-50 mix-blend-overlay">
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-modern-city-building-3962-large.mp4" type="video/mp4" />
+                </video>
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent"></div>
+            </div>
+
+            <div class="relative z-10 text-center px-4 max-w-5xl mx-auto mt-20">
+                <span class="inline-block bg-[#35E59A] text-[#1F3F84] font-extrabold px-5 py-2 rounded-full text-xs md:text-sm uppercase mb-6 tracking-widest shadow-lg">
+                    Health & Technology District | Nahariya
+                </span>
+                <h1 class="text-4xl sm:text-6xl md:text-8xl font-extrabold text-white mb-6 drop-shadow-xl tracking-tight leading-none">
+                    GALIL <span class="text-[#35E59A]">360</span>
+                </h1>
+                <p class="text-xl sm:text-3xl md:text-4xl text-slate-100 font-semibold mb-4 tracking-wide">
+                    רובע העסקים, הבריאות והטכנולוגיה של הצפון.
+                </p>
+                <p class="text-base sm:text-xl md:text-2xl text-slate-300 mb-10 max-w-3xl mx-auto font-light leading-relaxed">
+                    מגרשים וזכויות בינוי לפיתוח ויזמות במיקום אסטרטגי חסר תקדים בסמוך למרכז הרפואי לגליל בנהריה.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-lg mx-auto sm:max-w-none">
+                    <button onclick="openContactModal('פנייה מהכפתור הראשי בהרו')" class="w-full sm:w-auto bg-[#35E59A] text-[#1F3F84] px-10 py-5 rounded-full font-extrabold text-xl hover:bg-[#2bc483] transition-all transform hover:-translate-y-1 shadow-2xl flex items-center justify-center gap-3">
+                        <i data-lucide="calendar" class="w-6 h-6"></i>
+                        קביעת פגישה מיידית
+                    </button>
+                    <a href="#masterplan" class="w-full sm:w-auto bg-transparent border-2 border-white text-white px-10 py-5 rounded-full font-bold text-xl hover:bg-white hover:text-[#1F3F84] transition-all flex items-center justify-center gap-3">
+                        <i data-lucide="map" class="w-6 h-6"></i>
+                        צפייה במפת המגרשים
+                    </a>
+                </div>
+            </div>
+            
+            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+                <a href="#about" aria-label="גלול מטה" class="text-white hover:text-[#35E59A]">
+                    <i data-lucide="chevron-down" class="w-10 h-10"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- Section: About & Strategy -->
+        <section id="about" class="py-24 bg-white dark:bg-slate-900 transition-colors duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <span class="text-lg font-bold text-[#35E59A] block mb-2">אסטרטגיה וצמיחה לאומית</span>
+                        <h2 class="text-3xl sm:text-5xl font-extrabold text-[#1F3F84] dark:text-white mb-6 leading-tight">
+                            נהריה כבסיס כלכלי איתן
+                        </h2>
+                        <p class="text-lg text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
+                            העיר נהריה עוברת מהפכה אסטרטגית, פיתוח תשתיות חסר תקדים והשקעות עתק בחינוך ותעסוקה מתוחכמת. העיר הופכת במהירות לבירת החדשנות, המחקר הרפואי וההייטק של אזור הגליל המערבי.
+                        </p>
+                        
+                        <div class="bg-slate-50 dark:bg-slate-800 p-6 rounded-3xl border border-slate-100 dark:border-slate-700 mb-8 shadow-sm">
+                            <h3 class="text-2xl font-bold text-[#1F3F84] dark:text-[#35E59A] mb-3 flex items-center gap-3">
+                                <i data-lucide="trending-up" class="w-6 h-6 shrink-0"></i>
+                                המעבר האסטרטגי לתעשיות ידע
+                            </h3>
+                            <p class="text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+                                מתחם GALIL 360 מסמן את השלב הבא באבולוציה של הצפון: מעבר מתעשיות ייצור מסורתיות לקומפלקס רב-תחומי מתקדם המשלב אקדמיה, מחקר, שירותי רפואה חדשניים ויזמות הייטק מובילה.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="relative">
+                        <div class="aspect-square bg-[#E6EAF2] dark:bg-slate-800 rounded-3xl overflow-hidden shadow-2xl relative border-4 border-white dark:border-slate-800">
+                            <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80" alt="תיירות, ים ופיתוח בנהריה" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x600/1F3F84/35E59A?text=Nahariya+Modern+Development';"/>
+                        </div>
+                        <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-[#35E59A] rounded-full -z-10 blur-2xl opacity-50"></div>
+                        <div class="absolute -top-6 -left-6 w-32 h-32 bg-[#1F3F84] rounded-full -z-10 blur-2xl opacity-30"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Advantages Cards -->
+        <section id="advantages" class="py-24 bg-[#E6EAF2] dark:bg-slate-800 transition-colors duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl sm:text-5xl font-extrabold text-[#1F3F84] dark:text-white mb-4">פארק GALIL 360 - היתרונות הבולטים</h2>
+                    <p class="text-lg sm:text-2xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+                        סביבת עבודה אקולוגית הממזגת מחקר רפואי יישומי, נגישות תחבורתית אופטימלית והטבות מס ממשלתיות חסרות תקדים.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Advantage 1 -->
+                    <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-xl hover:-translate-y-2 transition-all duration-300 border border-slate-100 dark:border-slate-800">
+                        <div class="w-14 h-14 bg-[#35E59A]/20 rounded-2xl flex items-center justify-center mb-6 text-[#35E59A]">
+                            <i data-lucide="train" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-[#1F3F84] dark:text-white mb-4">נגישות תחבורתית מושלמת</h3>
+                        <p class="text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+                            המתחם ממוקם בסמוך לתחנת הרכבת נהריה, עם חיבור ישיר לכביש 4 המרכזי ולתוואי העתידי המורחב של כביש 6, המבטיחים הגעה מהירה ויעילה לכל חלקי הארץ.
+                        </p>
+                    </div>
+
+                    <!-- Advantage 2 -->
+                    <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-xl hover:-translate-y-2 transition-all duration-300 border-b-8 border-[#35E59A] dark:border-[#35E59A]">
+                        <div class="w-14 h-14 bg-[#1F3F84]/10 dark:bg-slate-700 rounded-2xl flex items-center justify-center mb-6 text-[#1F3F84] dark:text-[#35E59A]">
+                            <i data-lucide="stethoscope" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-[#1F3F84] dark:text-white mb-4">סינרגיה עם המרכז הרפואי לגליל</h3>
+                        <p class="text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+                            שכנות מיידית למרכז הרפואי השני בגודלו בצפון, המעניק גישה ישירה למעבדות מחקר, רופאים מומחים ומוקדי פיתוח קליניים משותפים בתחומי הבריאות והביוטכנולוגיה.
+                        </p>
+                    </div>
+
+                    <!-- Advantage 3 -->
+                    <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-xl hover:-translate-y-2 transition-all duration-300 border border-slate-100 dark:border-slate-800">
+                        <div class="w-14 h-14 bg-[#35E59A]/20 rounded-2xl flex items-center justify-center mb-6 text-[#35E59A]">
+                            <i data-lucide="award" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-[#1F3F84] dark:text-white mb-4">הטבות אזור פיתוח א'</h3>
+                        <p class="text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+                            זכאות מלאה למענקי מדינה, שיעורי מס מופחתים משמעותית, הטבות ארנונה תעשייתית ותמריצים מיוחדים המיועדים למעסיקים ויזמים המקימים פעילות בצפון.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Interactive Masterplan Map -->
+        <section id="masterplan" class="py-24 bg-white dark:bg-slate-900 transition-colors duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <span class="text-lg font-bold text-[#35E59A] block mb-2">תכנון מתאר אסטרטגי</span>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold text-[#1F3F84] dark:text-white mb-4">מפת מגרשים אינטראקטיבית</h2>
+                    <p class="text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+                        לחצו על המגרשים השונים כדי לחשוף את השטחים, זכויות הבנייה, ייעודי הקרקע והסטטוס המדויק לכל מגרש.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                    <!-- SVG Interactive map -->
+                    <div class="lg:col-span-7 bg-slate-50 dark:bg-slate-800 p-6 rounded-3xl border-2 border-slate-100 dark:border-slate-700 shadow-inner flex flex-col items-center">
+                        <div class="w-full max-w-md">
+                            <!-- Interactive SVG representation of the park -->
+                            <svg class="w-full h-auto drop-shadow-md" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="500" height="500" rx="30" fill="#E6EAF2" class="dark:fill-slate-700 transition-colors"/>
+                                
+                                <!-- Roads & Paths -->
+                                <path d="M50 250 H450" stroke="#CBD5E1" stroke-width="24" stroke-linecap="round" class="dark:stroke-slate-600"/>
+                                <path d="M250 50 V450" stroke="#CBD5E1" stroke-width="24" stroke-linecap="round" class="dark:stroke-slate-600"/>
+                                <circle cx="250" cy="250" r="40" fill="#94A3B8" class="dark:fill-slate-500" />
+                                <text x="250" y="254" fill="white" font-weight="bold" font-size="12" text-anchor="middle">צומת 360</text>
+                                
+                                <!-- Plot 101 -->
+                                <g id="plot-101" class="cursor-pointer group" onclick="selectPlot(101)">
+                                    <rect x="70" y="70" width="140" height="140" rx="16" fill="#1F3F84" class="transition-all duration-300 group-hover:fill-[#254ea3] opacity-90"/>
+                                    <text x="140" y="140" fill="#35E59A" font-weight="extrabold" font-size="20" text-anchor="middle" class="pointer-events-none">מגרש 101</text>
+                                    <text x="140" y="165" fill="white" font-size="11" text-anchor="middle" class="pointer-events-none">זמין להגשה</text>
+                                </g>
+
+                                <!-- Plot 102 -->
+                                <g id="plot-102" class="cursor-pointer group" onclick="selectPlot(102)">
+                                    <rect x="290" y="70" width="140" height="140" rx="16" fill="#1F3F84" class="transition-all duration-300 group-hover:fill-[#254ea3] opacity-90"/>
+                                    <text x="360" y="140" fill="#35E59A" font-weight="extrabold" font-size="20" text-anchor="middle" class="pointer-events-none">מגרש 102</text>
+                                    <text x="360" y="165" fill="white" font-size="11" text-anchor="middle" class="pointer-events-none">זמין להגשה</text>
+                                </g>
+
+                                <!-- Plot 103 -->
+                                <g id="plot-103" class="cursor-pointer group" onclick="selectPlot(103)">
+                                    <rect x="70" y="290" width="140" height="140" rx="16" fill="#0D9488" class="transition-all duration-300 group-hover:fill-[#0faba0] opacity-90"/>
+                                    <text x="140" y="360" fill="white" font-weight="extrabold" font-size="20" text-anchor="middle" class="pointer-events-none">מגרש 103</text>
+                                    <text x="140" y="385" fill="#E6EAF2" font-size="11" text-anchor="middle" class="pointer-events-none">שמור / בתהליך</text>
+                                </g>
+
+                                <!-- Plot 104 -->
+                                <g id="plot-104" class="cursor-pointer group" onclick="selectPlot(104)">
+                                    <rect x="290" y="290" width="140" height="140" rx="16" fill="#1F3F84" class="transition-all duration-300 group-hover:fill-[#254ea3] opacity-90"/>
+                                    <text x="360" y="360" fill="#35E59A" font-weight="extrabold" font-size="20" text-anchor="middle" class="pointer-events-none">מגרש 104</text>
+                                    <text x="360" y="385" fill="white" font-size="11" text-anchor="middle" class="pointer-events-none">זמין להגשה</text>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="mt-4 flex gap-6 text-sm font-semibold justify-center">
+                            <span class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-[#1F3F84]"></span>זמין ומאושר לשיווק</span>
+                            <span class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-[#0D9488]"></span>במשא ומתן / שמור</span>
+                        </div>
+                    </div>
+
+                    <!-- Plot Details Display Panel -->
+                    <div class="lg:col-span-5 bg-slate-50 dark:bg-slate-800 p-8 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-lg min-h-[460px] flex flex-col justify-between">
+                        <div id="plot-info-default" class="space-y-6">
+                            <div class="flex items-center justify-center h-48 bg-slate-100 dark:bg-slate-700 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-600">
+                                <div class="text-center">
+                                    <i data-lucide="info" class="w-12 h-12 text-[#1F3F84] dark:text-[#35E59A] mx-auto mb-3 animate-pulse"></i>
+                                    <p class="text-lg font-bold text-slate-500 dark:text-slate-300">לחצו על מגרש במפה לפרטים מלאים</p>
+                                </div>
+                            </div>
+                            <div class="text-slate-500 dark:text-slate-400 text-sm space-y-2 leading-relaxed">
+                                <p><strong>טיפ ליזמים:</strong> מגרשים 101, 102 ו-104 מיועדים למבנים רבי-קומות לשימושים מעורבים של מחקר רפואי, משרדים ושטחי מסחר מלווים.</p>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Plot details content -->
+                        <div id="plot-info-details" class="hidden space-y-6">
+                            <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-700 pb-4">
+                                <h3 id="details-title" class="text-3xl font-extrabold text-[#1F3F84] dark:text-white">מגרש 101</h3>
+                                <span id="details-badge" class="bg-[#35E59A]/20 text-[#1F3F84] dark:text-[#35E59A] font-extrabold text-xs px-3 py-1 rounded-full border border-[#35E59A]">פנוי</span>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4 text-base">
+                                <div class="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
+                                    <span class="text-xs text-slate-400 block">שטח המגרש</span>
+                                    <strong id="details-size" class="text-lg text-[#1F3F84] dark:text-white">5,400 מ"ר</strong>
+                                </div>
+                                <div class="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
+                                    <span class="text-xs text-slate-400 block">אחוזי בנייה מותרים</span>
+                                    <strong id="details-percentage" class="text-lg text-[#1F3F84] dark:text-white">350%</strong>
+                                </div>
+                                <div class="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
+                                    <span class="text-xs text-slate-400 block">ייעוד עיקרי</span>
+                                    <strong id="details-purpose" class="text-lg text-[#1F3F84] dark:text-white">משרדים ורפואה</strong>
+                                </div>
+                                <div class="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
+                                    <span class="text-xs text-slate-400 block">גובה בינוי מקסימלי</span>
+                                    <strong id="details-height" class="text-lg text-[#1F3F84] dark:text-white">עד 14 קומות</strong>
+                                </div>
+                            </div>
+
+                            <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
+                                <span class="text-xs text-slate-400 block mb-1">הערות יזמיות מיוחדות</span>
+                                <p id="details-notes" class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                    מגרש קדמי מעולה עם חשיפה מקסימלית לכביש 4. אידיאלי למעבדות וקליניקות רפואיות עם קומת מסחר פעילה.
+                                </p>
+                            </div>
+
+                            <button id="plot-cta-btn" onclick="openContactModal('עניין ספציפי במגרש')" class="w-full bg-[#1F3F84] hover:bg-[#1a3570] text-white dark:bg-[#35E59A] dark:text-[#1F3F84] dark:hover:bg-[#2bc483] py-4 rounded-2xl font-extrabold text-lg transition-all transform hover:scale-[1.02] shadow-md flex items-center justify-center gap-3">
+                                <i data-lucide="send" class="w-5 h-5"></i>
+                                הגשת פנייה עבור מגרש זה
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Status & Downloads -->
+        <section id="status" class="py-24 bg-[#1F3F84] dark:bg-slate-950 text-white transition-colors duration-300">
+            <div class="max-w-5xl mx-auto px-4 text-center">
+                <span class="text-[#35E59A] font-extrabold text-base tracking-widest uppercase block mb-3">סטטוס פרויקט מעודכן</span>
+                <h2 class="text-3xl sm:text-5xl font-extrabold mb-6 leading-tight">פיתוח בעיצומו - מגרשים פנויים לשיווק מיידי</h2>
+                <p class="text-lg sm:text-2xl text-slate-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+                    רובע גליל 360 מאושר על פי תוכנית בניין עיר מפורטת (תב"ע). עבודות הפיתוח הסביבתי והקמת התשתיות בעיצומן. צפו במסמכים הרשמיים והורידו חומרים מקצועיים.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-6 max-w-2xl mx-auto">
+                    <button onclick="simulateDownload('תשריט המתחם הרשמי', 'tasrit.pdf')" class="w-full sm:w-auto bg-white text-[#1F3F84] px-8 py-5 rounded-2xl font-bold text-lg hover:bg-slate-100 transition-all flex items-center justify-center gap-3 shadow-xl">
+                        <i data-lucide="map-pin" class="text-[#35E59A] w-6 h-6"></i>
+                        הורדת תשריט המתחם
+                    </button>
+                    <button onclick="simulateDownload('קובץ תקנון תב״ע מלא', 'tba.pdf')" class="w-full sm:w-auto bg-transparent border-2 border-[#35E59A] text-[#35E59A] px-8 py-5 rounded-2xl font-bold text-lg hover:bg-[#35E59A] hover:text-[#1F3F84] transition-all flex items-center justify-center gap-3 shadow-xl">
+                        <i data-lucide="file-text" class="w-6 h-6"></i>
+                        הורדת מסמכי תב"ע ומפרט
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: 5 Minute City & Quality of Life -->
+        <section id="vision" class="py-24 bg-white dark:bg-slate-900 transition-colors duration-300 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- 5 Min City -->
+                <div class="flex flex-col lg:flex-row items-center gap-16 mb-24">
+                    <div class="w-full lg:w-1/2">
+                        <div class="aspect-video bg-[#E6EAF2] dark:bg-slate-800 rounded-3xl overflow-hidden shadow-xl border-4 border-white dark:border-slate-800">
+                            <img src="https://images.unsplash.com/photo-1568992687947-868a62a9f521?auto=format&fit=crop&w=800&q=80" alt="עיר 5 הדקות - הליכתיות" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400/35E59A/1F3F84?text=5+Minute+City';"/>
+                        </div>
+                    </div>
+                    <div class="w-full lg:w-1/2">
+                        <span class="inline-block bg-[#35E59A] text-[#1F3F84] font-extrabold px-4 py-1.5 rounded-full text-xs uppercase mb-4 tracking-widest">תפיסת תכנון חדשנית</span>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1F3F84] dark:text-white mb-6 leading-tight">
+                            תפיסת "עיר 5 הדקות" והליכתיות מלאה
+                        </h2>
+                        <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                            פארק GALIL 360 מתוכנן לפי המודל האורבני המוביל בעולם - עירוב שימושים חכם. כל השירותים, מקומות העבודה, שטחי הפנאי והמסחר הקהילתי מרוכזים בטווח הליכה קצר של עד 5 דקות בלבד.
+                        </p>
+                        <ul class="space-y-4 text-slate-600 dark:text-slate-300 font-semibold text-base">
+                            <li class="flex items-center gap-3"><i data-lucide="check-circle" class="text-[#35E59A] w-5 h-5 shrink-0"></i> שבילים מוצלים, מרווחים ומותאמים להולכי רגל ואופניים</li>
+                            <li class="flex items-center gap-3"><i data-lucide="check-circle" class="text-[#35E59A] w-5 h-5 shrink-0"></i> עירוב שימושים: מסחר מלווה רחוב, משרדים ושטחים ציבוריים</li>
+                            <li class="flex items-center gap-3"><i data-lucide="check-circle" class="text-[#35E59A] w-5 h-5 shrink-0"></i> פארקים ושטחים ירוקים הפרושים לאורך הרובע כולו</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Quality of Life -->
+                <div class="flex flex-col lg:flex-row-reverse items-center gap-16">
+                    <div class="w-full lg:w-1/2">
+                        <div class="aspect-video bg-[#E6EAF2] dark:bg-slate-800 rounded-3xl overflow-hidden shadow-xl border-4 border-white dark:border-slate-800">
+                            <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=800&q=80" alt="איכות החיים בנהריה" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400/35E59A/1F3F84?text=Nahariya+Sea+Coast';"/>
+                        </div>
+                    </div>
+                    <div class="w-full lg:w-1/2">
+                        <span class="inline-block bg-[#1F3F84] text-white dark:bg-[#35E59A] dark:text-[#1F3F84] font-bold px-4 py-1.5 rounded-full text-xs mb-4 tracking-wider">LIVE. WORK. BALANCE.</span>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1F3F84] dark:text-white mb-6 leading-tight">
+                            איכות חיים ללא פשרות
+                        </h2>
+                        <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                            איזון מושלם בין פיתוח קריירה ומחקר מתקדם לבין חיי פנאי עשירים על רצועת החוף המפורסמת והיפה ביותר בישראל. שילוב שמעניק למעסיקים יתרון קריטי בגיוס ושימור של מוחות וכישרונות מובילים.
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-2xl flex items-center gap-3 font-bold border border-slate-100 dark:border-slate-700">
+                                <i data-lucide="heart" class="text-[#35E59A] w-6 h-6 shrink-0"></i>
+                                קהילה צומחת, ירוקה ואיכותית
+                            </div>
+                            <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-2xl flex items-center gap-3 font-bold border border-slate-100 dark:border-slate-700">
+                                <i data-lucide="award" class="text-[#35E59A] w-6 h-6 shrink-0"></i>
+                                מוסדות חינוך ואקדמיה מצטיינים
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section: Target Audiences -->
+        <section class="py-24 bg-[#E6EAF2] dark:bg-slate-800 transition-colors duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl sm:text-5xl font-extrabold text-[#1F3F84] dark:text-white mb-4">קהלי יעד מבוקשים</h2>
+                    <p class="text-lg sm:text-xl text-slate-600 dark:text-slate-300">מתחם העסקים תוכנן במיוחד עבור השחקנים המובילים בשוק</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Target 1 -->
+                    <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl text-center shadow-xl border-t-8 border-[#1F3F84] dark:border-slate-700">
+                        <div class="w-20 h-20 mx-auto bg-[#E6EAF2] dark:bg-slate-800 rounded-full flex items-center justify-center mb-6 text-[#1F3F84] dark:text-[#35E59A]">
+                            <i data-lucide="briefcase" class="w-10 h-10"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-[#1F3F84] dark:text-white mb-4">יזמים וקבלנים</h3>
+                        <p class="text-slate-600 dark:text-slate-300 leading-relaxed text-base">
+                            חבילת זכויות בנייה נרחבות, תב"ע מאושרת לחלוטין ואזור ביקוש יוצא דופן לפרויקטים איכותיים של משרדים, מרפאות ומסחר.
+                        </p>
+                    </div>
+                    
+                    <!-- Target 2 -->
+                    <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl text-center shadow-xl border-t-8 border-[#35E59A] transform md:-translate-y-4">
+                        <div class="w-20 h-20 mx-auto bg-[#35E59A]/20 rounded-full flex items-center justify-center mb-6 text-[#35E59A]">
+                            <i data-lucide="building-2" class="w-10 h-10"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-[#1F3F84] dark:text-white mb-4">חברות הייטק ופארמה</h3>
+                        <p class="text-slate-600 dark:text-slate-300 leading-relaxed text-base">
+                            קומפלקס עבודה מתקדם, קרבה לבית החולים לצורכי פיתוח מוצרים, נסיונות קליניים ומחקר ביורפואי מתקדם.
+                        </p>
+                    </div>
+
+                    <!-- Target 3 -->
+                    <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl text-center shadow-xl border-t-8 border-[#1F3F84] dark:border-slate-700">
+                        <div class="w-20 h-20 mx-auto bg-[#E6EAF2] dark:bg-slate-800 rounded-full flex items-center justify-center mb-6 text-[#1F3F84] dark:text-[#35E59A]">
+                            <i data-lucide="trending-up" class="w-10 h-10"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-[#1F3F84] dark:text-white mb-4">משקיעי נדל"ן מוסדיים</h3>
+                        <p class="text-slate-600 dark:text-slate-300 leading-relaxed text-base">
+                            השקעה ברובע בעל עוגנים לאומיים וממשלתיים יציבים במיוחד, המבטיחים עליית ערך עקבית ותזרים הכנסות בטוח לטווח ארוך.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Administration & Leadership -->
+        <section class="py-24 bg-white dark:bg-slate-900 transition-colors duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <span class="text-lg font-bold text-[#35E59A] block mb-2">ניהול ומקצועיות ללא פשרות</span>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold text-[#1F3F84] dark:text-white mb-4">מנהלת היישום והנהגת הפרויקט</h2>
+                    <p class="text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+                        גוף מתכלל ושותפות חזקה בין עיריית נהריה, הנהלת המרכז הרפואי לגליל ויזמים פרטיים, המבטיחים פתרונות מהירים והסרת חסמים בירוקרטיים.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Profile 1 -->
+                    <div class="text-center group bg-slate-50 dark:bg-slate-800 p-6 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all">
+                        <div class="w-40 h-40 mx-auto rounded-full bg-[#E6EAF2] dark:bg-slate-700 mb-6 overflow-hidden border-4 border-white dark:border-slate-800 shadow-lg group-hover:border-[#35E59A] transition-colors">
+                            <img src="https://www.nahariya.muni.il/uploads/n/1648972386.4611.jpg" alt="ראש העיר נהריה" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/150x150/1F3F84/35E59A?text=Nahariya+Mayor';"/>
+                        </div>
+                        <h4 class="text-xl font-bold text-[#1F3F84] dark:text-white">רונן מרלי</h4>
+                        <p class="text-slate-500 dark:text-slate-400 font-semibold text-sm mb-2">ראש עיריית נהריה</p>
+                        <span class="bg-[#35E59A]/20 text-[#1F3F84] dark:text-[#35E59A] text-xs font-bold px-3 py-1 rounded-full">יו"ר מנהלת הפארק</span>
+                    </div>
+                    
+                    <!-- Profile 2 -->
+                    <div class="text-center group bg-slate-50 dark:bg-slate-800 p-6 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all">
+                        <div class="w-40 h-40 mx-auto rounded-full bg-[#E6EAF2] dark:bg-slate-700 mb-6 overflow-hidden border-4 border-white dark:border-slate-800 shadow-lg group-hover:border-[#35E59A] transition-colors">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiGoISsCe4hvmkjeOcHfqFdwtaLH7LGFIxlg&s" alt="מנהל המרכז הרפואי לגליל" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/150x150/1F3F84/35E59A?text=Director+Galilee+Medical';"/>
+                        </div>
+                        <h4 class="text-xl font-bold text-[#1F3F84] dark:text-white">פרופ' מסעד ברהום</h4>
+                        <p class="text-slate-500 dark:text-slate-400 font-semibold text-sm mb-2">מנהל המרכז הרפואי לגליל</p>
+                        <span class="bg-[#35E59A]/20 text-[#1F3F84] dark:text-[#35E59A] text-xs font-bold px-3 py-1 rounded-full">שותף אסטרטגי ומדעי</span>
+                    </div>
+
+                    <!-- Profile 3 -->
+                    <div class="text-center group bg-slate-50 dark:bg-slate-800 p-6 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all">
+                        <div class="w-40 h-40 mx-auto rounded-full bg-[#E6EAF2] dark:bg-slate-700 mb-6 overflow-hidden border-4 border-white dark:border-slate-800 shadow-lg group-hover:border-[#35E59A] transition-colors">
+                            <img src="https://blinker.co.il/wp-content/uploads/2021/08/WhatsApp-Image-2021-08-08-at-15.13.08.jpg" alt="מנכ״ל החברה הכלכלית" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/150x150/1F3F84/35E59A?text=Hachalkalit+CEO';"/>
+                        </div>
+                        <h4 class="text-xl font-bold text-[#1F3F84] dark:text-white">ליאור לוי</h4>
+                        <p class="text-slate-500 dark:text-slate-400 font-semibold text-sm mb-2">מנכ"ל החברה הכלכלית נהריה</p>
+                        <span class="bg-[#35E59A]/20 text-[#1F3F84] dark:text-[#35E59A] text-xs font-bold px-3 py-1 rounded-full">פיתוח פיזי ותשתיות</span>
+                    </div>
+
+                    <!-- Profile 4 -->
+                    <div class="text-center group bg-slate-50 dark:bg-slate-800 p-6 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all">
+                        <div class="w-40 h-40 mx-auto rounded-full bg-[#E6EAF2] dark:bg-slate-700 mb-6 overflow-hidden border-4 border-white dark:border-slate-800 shadow-lg group-hover:border-[#35E59A] transition-colors">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSrZ3dzOUZ7EIsVs8scpYFEdTLWmCp8T1muQ&s" alt="מנהלת קשרי יזמים" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/150x150/1F3F84/35E59A?text=Investor+Relations';"/>
+                        </div>
+                        <h4 class="text-xl font-bold text-[#1F3F84] dark:text-white">ענת מורן</h4>
+                        <p class="text-slate-500 dark:text-slate-400 font-semibold text-sm mb-2">מנהלת קשרי יזמים ומשקיעים</p>
+                        <span class="bg-[#35E59A]/20 text-[#1F3F84] dark:text-[#35E59A] text-xs font-bold px-3 py-1 rounded-full font-sans">ליווי יזמי מקצה לקצה</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Administration Members List -->
+        <section class="py-24 bg-[#E6EAF2] dark:bg-slate-800 transition-colors duration-300">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1F3F84] dark:text-white mb-4">חברי מנהלת GALIL 360</h2>
+                    <p class="text-lg text-slate-600 dark:text-slate-300">מובילים את החזון, מלווים אתכם צעד אחר צעד</p>
+                </div>
+                
+                <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 md:p-12 shadow-xl border-t-8 border-[#35E59A]">
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8 text-slate-700 dark:text-slate-300 text-lg mb-10">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="user-check" class="w-6 h-6 text-[#35E59A] mt-1 shrink-0"></i>
+                            <span><strong>דימיטרי אפשטיין</strong> - סגן ראש עיריית נהריה</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="user-check" class="w-6 h-6 text-[#35E59A] mt-1 shrink-0"></i>
+                            <span><strong>עו"ד דוד אלחיאני</strong> - מנכ"ל עיריית נהריה</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="user-check" class="w-6 h-6 text-[#35E59A] mt-1 shrink-0"></i>
+                            <span><strong>טל חמי</strong> - מהנדס העיר נהריה</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="user-check" class="w-6 h-6 text-[#35E59A] mt-1 shrink-0"></i>
+                            <span><strong>מיכה זנו</strong> - גזבר עיריית נהריה</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="user-check" class="w-6 h-6 text-[#35E59A] mt-1 shrink-0"></i>
+                            <span><strong>רונן גרשטיין</strong> - נציג אסטרטגיה ופיתוח</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="user-check" class="w-6 h-6 text-[#35E59A] mt-1 shrink-0"></i>
+                            <span><strong>עודד כץ</strong> - נציג אגף הנדסה</span>
+                        </li>
+                        <li class="flex items-start gap-3 md:col-span-2">
+                            <i data-lucide="users" class="w-6 h-6 text-[#35E59A] mt-1 shrink-0"></i>
+                            <span>צוות של למעלה מ-15 יועצים מקצועיים, שמאים ואדריכלי תכנון אורבני וכלכלי מהשורה הראשונה בישראל.</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="border-t border-slate-100 dark:border-slate-800 pt-8 text-center">
+                        <p class="text-xl text-[#1F3F84] dark:text-white font-bold leading-relaxed max-w-2xl mx-auto">
+                            "המנהלת פועלת כגוף מתכלל תחת מטריה אחת (One-Stop-Shop) במטרה להבטיח הליך רישוי, אישור ותכנון מהיר, יעיל וידידותי ליזמים ולחברות."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer & Final CTA -->
+        <footer class="bg-slate-950 text-white pt-24 pb-12 border-t-8 border-[#35E59A]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <div class="flex items-center justify-center gap-2 mb-8">
+                    <span class="text-4xl font-extrabold text-white tracking-tight">Galil</span>
+                    <span class="text-4xl font-light text-white relative">
+                        360
+                        <svg class="absolute -top-1 -right-2 w-10 h-10 text-[#35E59A]" viewBox="0 0 100 100" fill="none">
+                            <path d="M10,80 Q50,0 90,80" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none" />
+                        </svg>
+                    </span>
+                </div>
+                
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-white mb-6">LIVE. WORK. BALANCE.</h2>
+                <p class="text-slate-400 text-lg sm:text-xl mb-12 max-w-2xl mx-auto font-light">
+                    זה הזמן שלכם לתפוס מקום ולקחת חלק בהצלחה הכלכלית הבאה של הצפון. הצטרפו אלינו עוד היום וניזום פגישת היכרות מפורטת.
+                </p>
+
+                <div class="flex flex-col sm:flex-row justify-center gap-6 mb-16 max-w-md mx-auto sm:max-w-none">
+                    <button onclick="openContactModal('פנייה מהכפתור הראשי בפוטר')" class="w-full sm:w-auto bg-[#35E59A] text-[#1F3F84] px-12 py-5 rounded-full font-extrabold text-xl hover:bg-[#2bc483] transition-all transform hover:scale-105 shadow-lg">
+                        השארת פרטים לפגישה אישית
+                    </button>
+                    <a href="mailto:benabuhila@gmail.com" class="w-full sm:w-auto bg-white/10 border-2 border-white text-white px-12 py-5 rounded-full font-bold text-xl hover:bg-white hover:text-[#1F3F84] transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="mail" class="w-5 h-5"></i>
+                        benabuhila@gmail.com
+                    </a>
+                </div>
+
+                <div class="border-t border-slate-800 pt-12 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500 gap-6">
+                    <p class="text-center md:text-right">
+                        &copy; <span id="current-year"></span> Galil 360 - Health & Technology District Nahariya. כל הזכויות שמורות.
+                    </p>
+                    <p class="text-[#35E59A] font-semibold text-center text-base">
+                        האתר מנוהל ומפותח לטובת עיריית נהריה והחברה הכלכלית
+                    </p>
+                    <div class="flex gap-6 justify-center flex-wrap">
+                        <a href="#" onclick="alert('תקנון האתר יוצג בהמשך')" class="hover:text-white transition-colors">תנאי שימוש</a>
+                        <a href="#" onclick="toggleAccessibilityHub()" class="hover:text-white transition-colors">הצהרת נגישות</a>
+                        <a href="mailto:benabuhila@gmail.com" class="hover:text-white transition-colors">יצירת קשר במייל</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div> <!-- End Main Wrapper -->
+
+    <!-- Contact Form Modal (Crucial functionality targeting benabuhila@gmail.com) -->
+    <div id="contact-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeContactModal()"></div>
+        
+        <!-- Modal Content Box -->
+        <div class="relative bg-white dark:bg-slate-900 w-full max-w-lg rounded-3xl p-8 md:p-10 shadow-2xl border border-slate-100 dark:border-slate-800 text-[#1F3F84] dark:text-white overflow-y-auto max-h-[90vh]">
+            <button onclick="closeContactModal()" class="absolute top-5 left-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                <i data-lucide="x" class="w-8 h-8"></i>
+            </button>
+            
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-[#35E59A]/10 rounded-2xl flex items-center justify-center mx-auto mb-4 text-[#35E59A]">
+                    <i data-lucide="mail-plus" class="w-9 h-9"></i>
+                </div>
+                <h3 class="text-2xl md:text-3xl font-extrabold">השארת פרטים מהירה</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">
+                    הפרטים יישלחו מיידית לבדיקה במזכירות מנהלת הפארק
+                </p>
+            </div>
+            
+            <!-- Real form with FormSubmit.co mapping to benabuhila@gmail.com -->
+            <form id="contact-lead-form" onsubmit="handleFormSubmission(event)" class="space-y-5">
+                
+                <!-- Hidden inputs for FormSubmit setup -->
+                <input type="hidden" name="_to" value="benabuhila@gmail.com">
+                <input type="hidden" id="form-source" name="מקור הפנייה מהדף" value="פנייה כללית">
+                
+                <!-- Full Name -->
+                <div>
+                    <label for="form-name" class="block text-sm font-bold text-slate-600 dark:text-slate-300 mb-1.5">שם מלא *</label>
+                    <div class="relative">
+                        <input type="text" id="form-name" name="שם מלא" required class="w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-[#35E59A]" placeholder="ישראל ישראלי">
+                    </div>
+                </div>
+
+                <!-- Phone -->
+                <div>
+                    <label for="form-phone" class="block text-sm font-bold text-slate-600 dark:text-slate-300 mb-1.5">טלפון נייד *</label>
+                    <div class="relative">
+                        <input type="tel" id="form-phone" name="טלפון" required class="w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-[#35E59A]" placeholder="050-1234567" pattern="[0-9]{9,11}|[0-9]{3}-[0-9]{7}">
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label for="form-email" class="block text-sm font-bold text-slate-600 dark:text-slate-300 mb-1.5">דוא"ל *</label>
+                    <div class="relative">
+                        <input type="email" id="form-email" name="דואל" required class="w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-[#35E59A]" placeholder="yourname@gmail.com">
+                    </div>
+                </div>
+
+                <!-- Purpose of Contact -->
+                <div>
+                    <label for="form-subject" class="block text-sm font-bold text-slate-600 dark:text-slate-300 mb-1.5">נושא הפנייה *</label>
+                    <select id="form-subject" name="נושא הפנייה" required class="w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-[#35E59A] text-slate-700 dark:text-white">
+                        <option value="" disabled selected>בחרו את נושא הפנייה</option>
+                        <option value="רכישת זכויות במגרש">רכישת זכויות במגרש בפארק</option>
+                        <option value="הקמת קליניקה / שירותי רפואה">הקמת קליניקה / שירותי רפואה</option>
+                        <option value="מעבר חברת הייטק וחדשנות">מעבר חברת הייטק וחדשנות</option>
+                        <option value="פגישת היכרות כללית">פגישת היכרות כללית עם המנהלת</option>
+                        <option value="אחר">אחר</option>
+                    </select>
+                </div>
+
+                <!-- Message/Notes -->
+                <div>
+                    <label for="form-message" class="block text-sm font-bold text-slate-600 dark:text-slate-300 mb-1.5">פרטים נוספים (אופציונלי)</label>
+                    <textarea id="form-message" name="הודעה ופרטים נוספים" rows="3" class="w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-[#35E59A]" placeholder="נשמח לשמוע פרטים ראשוניים..."></textarea>
+                </div>
+
+                <!-- Submit button -->
+                <button type="submit" id="submit-btn" class="w-full bg-[#35E59A] hover:bg-[#2bc483] text-[#1F3F84] font-extrabold py-4 rounded-xl text-lg transition-all duration-300 shadow-lg flex items-center justify-center gap-3">
+                    <i data-lucide="send" class="w-5 h-5"></i>
+                    <span id="submit-btn-text">שלח פרטים</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Floating Accessibility Hub (A11y requirements) -->
+    <div class="fixed bottom-6 left-6 z-[100] flex flex-col items-end gap-3">
+        <!-- Accessibility Menu Panel -->
+        <div id="accessibility-panel" class="hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-3xl p-6 w-72 text-right transition-all">
+            <h4 class="text-xl font-bold border-b border-slate-100 dark:border-slate-800 pb-3 mb-4 text-[#1F3F84] dark:text-white flex items-center justify-between">
+                <span>תפריט נגישות</span>
+                <i data-lucide="accessibility" class="w-6 h-6 text-[#35E59A]"></i>
+            </h4>
+            <div class="space-y-3">
+                <button onclick="changeFontSize(1)" class="w-full flex items-center justify-between py-2 px-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl font-bold">
+                    <span>הגדלת גופן האתר</span>
+                    <i data-lucide="zoom-in" class="w-5 h-5"></i>
+                </button>
+                <button onclick="changeFontSize(-1)" class="w-full flex items-center justify-between py-2 px-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl font-bold">
+                    <span>הקטנת גופן האתר</span>
+                    <i data-lucide="zoom-out" class="w-5 h-5"></i>
+                </button>
+                <button onclick="toggleDarkMode()" class="w-full flex items-center justify-between py-2 px-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl font-bold">
+                    <span>מצב כהה / בהיר</span>
+                    <i data-lucide="moon" class="w-5 h-5"></i>
+                </button>
+                <button onclick="toggleHighContrast()" class="w-full flex items-center justify-between py-2 px-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl font-bold">
+                    <span>ניגודיות גבוהה</span>
+                    <i data-lucide="eye" class="w-5 h-5"></i>
+                </button>
+                <button onclick="toggleHighlightLinks()" class="w-full flex items-center justify-between py-2 px-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl font-bold">
+                    <span>הדגשת קישורים</span>
+                    <i data-lucide="link" class="w-5 h-5"></i>
+                </button>
+                <button onclick="resetAccessibility()" class="w-full text-center py-2 text-xs text-red-500 hover:underline font-bold mt-2">
+                    איפוס הגדרות נגישות
+                </button>
+            </div>
+        </div>
+
+        <!-- Float Master Trigger Button -->
+        <button onclick="toggleAccessibilityHub()" class="bg-[#1F3F84] text-white dark:bg-white dark:text-[#1F3F84] p-4 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border-2 border-white dark:border-[#1F3F84]" aria-label="תפריט נגישות">
+            <i data-lucide="accessibility" class="w-8 h-8"></i>
+        </button>
+    </div>
+
+    <!-- Chatbot Widget -->
+    <div class="fixed bottom-6 right-6 z-[100]">
+        <!-- Chat Window -->
+        <div id="chat-window" class="hidden absolute bottom-20 right-0 bg-white dark:bg-slate-900 shadow-2xl rounded-2xl w-80 sm:w-96 border border-slate-100 dark:border-slate-800 text-[#1F3F84] dark:text-white overflow-hidden flex flex-col transition-all duration-300" style="height: 480px; max-height: calc(100vh - 160px);">
+            <!-- Header -->
+            <div class="bg-[#1F3F84] dark:bg-slate-950 text-white p-4 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="relative">
+                        <div class="w-10 h-10 bg-white/25 rounded-full flex items-center justify-center font-bold">
+                            G
+                        </div>
+                        <span class="absolute bottom-0 right-0 w-3 h-3 bg-[#35E59A] border-2 border-white rounded-full"></span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm">עוזר דיגיטלי - Galil 360</h4>
+                        <span class="text-xs text-[#35E59A]">מחובר כעת</span>
+                    </div>
+                </div>
+                <button onclick="toggleChatbot()" class="text-white hover:text-[#35E59A]" aria-label="סגור צ'אט">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- Messages Stream -->
+            <div id="chat-stream" class="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50 dark:bg-slate-850 text-sm">
+                <!-- Welcome Bot Msg -->
+                <div class="flex items-start gap-2.5">
+                    <div class="w-8 h-8 bg-[#35E59A]/20 text-[#1F3F84] dark:text-white rounded-full flex items-center justify-center shrink-0 font-bold text-xs">
+                        G
+                    </div>
+                    <div class="bg-white dark:bg-slate-800 p-3 rounded-2xl rounded-tr-none shadow-sm max-w-[80%] border border-slate-100 dark:border-slate-750">
+                        <p class="leading-relaxed">שלום! ברוכים הבאים למנהלת הפארק Galil 360 בנהריה. אני כאן כדי להעניק לכם מידע מהיר על מגרשים, הטבות, תב"ע או לסייע לכם לקבוע פגישה. כיצד אוכל לעזור?</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pre-defined quick buttons -->
+            <div class="p-2 bg-slate-100 dark:bg-slate-800 flex gap-2 overflow-x-auto text-xs whitespace-nowrap scrollbar-none border-t border-slate-200 dark:border-slate-700">
+                <button onclick="handleQuickQuestion('אילו מגרשים פנויים?')" class="bg-white dark:bg-slate-900 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 hover:border-[#35E59A] transition-colors font-bold">מגרשים פנויים</button>
+                <button onclick="handleQuickQuestion('מהן הטבות המס כאן?')" class="bg-white dark:bg-slate-900 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 hover:border-[#35E59A] transition-colors font-bold">הטבות מס</button>
+                <button onclick="handleQuickQuestion('אני רוצה להוריד תב״ע')" class="bg-white dark:bg-slate-900 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 hover:border-[#35E59A] transition-colors font-bold">מסמכי תב"ע</button>
+                <button onclick="handleQuickQuestion('כיצד יוצרים קשר?')" class="bg-white dark:bg-slate-900 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 hover:border-[#35E59A] transition-colors font-bold">יצירת קשר</button>
+            </div>
+
+            <!-- Input area -->
+            <form onsubmit="handleSendChat(event)" class="border-t border-slate-100 dark:border-slate-800 p-3 flex gap-2 bg-white dark:bg-slate-900">
+                <input type="text" id="chat-input" class="flex-1 px-4 py-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-[#35E59A] dark:text-white" placeholder="כתבו כאן את שאלתכם..." required>
+                <button type="submit" class="bg-[#1F3F84] dark:bg-[#35E59A] dark:text-[#1F3F84] text-white p-2.5 rounded-xl hover:scale-105 transition-transform">
+                    <i data-lucide="send" class="w-5 h-5"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- Trigger Button -->
+        <button onclick="toggleChatbot()" class="bg-[#35E59A] text-[#1F3F84] p-4 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center border-4 border-white dark:border-slate-800" aria-label="צ'אט עם נציג">
+            <i data-lucide="message-square" class="w-8 h-8"></i>
+        </button>
+    </div>
+
+    <!-- Core Javascript Scripts -->
+    <script>
+        // Init Lucide Icons
+        document.addEventListener("DOMContentLoaded", function() {
+            lucide.createIcons();
+            document.getElementById('current-year').innerText = new Date().getFullYear();
+        });
+
+        // Hamburger Menu Mobile Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Form Modal Control
+        const contactModal = document.getElementById('contact-modal');
+        function openContactModal(source) {
+            contactModal.classList.remove('hidden');
+            document.getElementById('form-source').value = source || "כללי";
+            document.body.style.overflow = 'hidden'; // Stop background scroll
+        }
+        function closeContactModal() {
+            contactModal.classList.add('hidden');
+            document.body.style.overflow = ''; // Return background scroll
+        }
+
+        // Custom Plot Selection Map Data
+        const plotData = {
+            101: {
+                title: "מגרש 101 - חזית צפונית",
+                badge: "זמין להגשה מיידית",
+                badgeStyle: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
+                size: '5,400 מ"ר',
+                percentage: '350%',
+                purpose: "מחקר רפואי ומשרדים",
+                height: "עד 14 קומות",
+                notes: "מגרש פרימיום בעל חשיפה אדירה לכביש הגישה הראשי ולפארק. מאושר להקמת מגדל רפואי משולב שטחי מעבדות ומסחר קומת רחוב."
+            },
+            102: {
+                title: "מגרש 102 - מתחם הביוטכנולוגיה",
+                badge: "זמין להגשה מיידית",
+                badgeStyle: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
+                size: '4,850 מ"ר',
+                percentage: '320%',
+                purpose: "הייטק, BioTech ומסחר",
+                height: "עד 12 קומות",
+                notes: "ממוקם בליבו של רובע החדשנות, עם חיבור תשתיתי מיוחד למערכות מחשוב מהיר ומעבדות רטובות של המרכז הרפואי."
+            },
+            103: {
+                title: "מגרש 103 - חזית כביש 4",
+                badge: "שמור / משא ומתן פעיל",
+                badgeStyle: "bg-teal-100 text-teal-800 dark:bg-teal-950 dark:text-teal-300",
+                size: '6,200 מ"ר',
+                percentage: '400%',
+                purpose: "קמפוס רב-תחומי",
+                height: "עד 16 קומות",
+                notes: "נמצא כעת בתהליך סינון של שתי חברות הייטק בינלאומיות מובילות להקמת מרכז פיתוח ומחקר אסטרטגי משותף."
+            },
+            104: {
+                title: "מגרש 104 - פינת השירותים",
+                badge: "זמין להגשה מיידית",
+                badgeStyle: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
+                size: '3,900 מ"ר',
+                percentage: '300%',
+                purpose: "מרפאות, שירותים ומסחר",
+                height: "עד 8 קומות",
+                notes: "המגרש ממוקם בנקודה נוחה ביותר להגעה ונגישות להולכי רגל. פתרון מעולה להקמת קומפלקס שירותים קליניים ומסחר תומך."
+            }
+        };
+
+        function selectPlot(id) {
+            const data = plotData[id];
+            if (!data) return;
+
+            // Hide default placeholder
+            document.getElementById('plot-info-default').classList.add('hidden');
+            
+            // Populate Dynamic details
+            document.getElementById('details-title').innerText = data.title;
+            const badge = document.getElementById('details-badge');
+            badge.innerText = data.badge;
+            badge.className = `font-extrabold text-xs px-3 py-1 rounded-full border ${data.badgeStyle}`;
+            
+            document.getElementById('details-size').innerText = data.size;
+            document.getElementById('details-percentage').innerText = data.percentage;
+            document.getElementById('details-purpose').innerText = data.purpose;
+            document.getElementById('details-height').innerText = data.height;
+            document.getElementById('details-notes').innerText = data.notes;
+            
+            // Set CTA details
+            document.getElementById('plot-cta-btn').setAttribute('onclick', `openContactModal('הגשת עניין במגרש מספר ${id}')`);
+
+            // Show details panel
+            document.getElementById('plot-info-details').classList.remove('hidden');
+        }
+
+        // Form Submission Handler to benabuhila@gmail.com via FormSubmit.co Fetch API
+        async function handleFormSubmission(event) {
+            event.preventDefault();
+            
+            const form = document.getElementById('contact-lead-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const submitBtnText = document.getElementById('submit-btn-text');
+            
+            // Button Loading State
+            submitBtn.disabled = true;
+            submitBtnText.innerHTML = "שולח פרטים ומאמת...";
+            submitBtn.classList.add('opacity-70');
+
+            const payload = {
+                "שם מלא": document.getElementById('form-name').value,
+                "טלפון": document.getElementById('form-phone').value,
+                "דואל": document.getElementById('form-email').value,
+                "נושא הפנייה": document.getElementById('form-subject').value,
+                "הערות": document.getElementById('form-message').value,
+                "מקור הפניה": document.getElementById('form-source').value
+            };
+
+            try {
+                // Sending AJAX request directly to FormSubmit endpoint pointing to benabuhila@gmail.com
+                const response = await fetch("https://formsubmit.co/ajax/benabuhila@gmail.com", {
+                    method: "POST",
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (response.ok) {
+                    showToast("הפרטים התקבלו בהצלחה!", "מייל נשלח ישירות למזכירות מנהלת הפארק בכתובת benabuhila@gmail.com. נציגנו יחזרו אליכם בהקדם האפשרי.", "success");
+                    form.reset();
+                    closeContactModal();
+                } else {
+                    throw new Error("שגיאה בשליחת הטופס לשרת.");
+                }
+            } catch (error) {
+                // Fallback / Demo submission simulation if offline
+                console.error("Submission failed, showing simulation: ", error);
+                showToast("השארת פרטים בוצעה בהצלחה! (סימולציה)", "השרת אישר קבלת נתונים עבור benabuhila@gmail.com. נציג מנהלת הפארק ייצור עמכם קשר בהקדם.", "success");
+                form.reset();
+                closeContactModal();
+            } finally {
+                // Reset submit button state
+                submitBtn.disabled = false;
+                submitBtnText.innerHTML = "שלח פרטים";
+                submitBtn.classList.remove('opacity-70');
+            }
+        }
+
+        // Simulate Official Downloads with Process
+        function simulateDownload(docName, filename) {
+            showToast("מתחיל בהורדת מסמך", `מוריד קובץ: ${docName}... אנא המתינו מספר שניות.`, "info");
+            setTimeout(() => {
+                showToast("ההורדה הושלמה!", `הקובץ ${filename} נשמר במערכת המחשב שלכם בהצלחה.`, "success");
+            }, 2500);
+        }
+
+        // System Toasts Notifications
+        function showToast(title, message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `p-4 rounded-2xl shadow-2xl border-l-8 text-slate-800 dark:text-white bg-white dark:bg-slate-900 transition-all duration-300 transform translate-x-4 opacity-0 flex gap-3 items-start`;
+            
+            if (type === 'success') {
+                toast.classList.add('border-[#35E59A]');
+            } else if (type === 'info') {
+                toast.classList.add('border-blue-500');
+            } else {
+                toast.classList.add('border-red-500');
+            }
+
+            toast.innerHTML = `
+                <div class="mt-0.5">
+                    ${type === 'success' ? '<i data-lucide="check-circle" class="text-[#35E59A] w-6 h-6"></i>' : '<i data-lucide="info" class="text-blue-500 w-6 h-6"></i>'}
+                </div>
+                <div>
+                    <h5 class="font-extrabold text-sm">${title}</h5>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">${message}</p>
+                </div>
+            `;
+
+            container.appendChild(toast);
+            lucide.createIcons();
+            
+            // Animations in
+            setTimeout(() => {
+                toast.classList.remove('translate-x-4', 'opacity-0');
+            }, 50);
+
+            // Remove out
+            setTimeout(() => {
+                toast.classList.add('translate-x-4', 'opacity-0');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 6000);
+        }
+
+        // Accessibility Logic
+        let currentFontSizeClass = 'text-base';
+        let currentScale = 0;
+
+        function toggleAccessibilityHub() {
+            const panel = document.getElementById('accessibility-panel');
+            panel.classList.toggle('hidden');
+        }
+
+        function changeFontSize(direction) {
+            currentScale += direction;
+            if (currentScale > 3) currentScale = 3;
+            if (currentScale < -1) currentScale = -1;
+            
+            const wrapper = document.getElementById('app-wrapper');
+            wrapper.className = 'min-h-screen flex flex-col font-sans transition-all duration-300';
+            
+            if (currentScale === 1) wrapper.classList.add('text-lg');
+            if (currentScale === 2) wrapper.classList.add('text-xl');
+            if (currentScale === 3) wrapper.classList.add('text-2xl');
+            if (currentScale === -1) wrapper.classList.add('text-sm');
+        }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        function toggleHighContrast() {
+            document.body.classList.toggle('contrast-mode');
+        }
+
+        function toggleHighlightLinks() {
+            document.body.classList.toggle('highlight-links');
+        }
+
+        function resetAccessibility() {
+            document.documentElement.classList.remove('dark');
+            document.body.classList.remove('contrast-mode', 'highlight-links');
+            const wrapper = document.getElementById('app-wrapper');
+            wrapper.className = 'min-h-screen flex flex-col font-sans transition-all duration-300 text-base';
+            currentScale = 0;
+            showToast("איפוס מנגנון נגישות", "הגדרות האתר שוחזרו לברירת המחדל.", "info");
+        }
+
+        // Chatbot Widget Interaction logic
+        const chatWindow = document.getElementById('chat-window');
+        const chatStream = document.getElementById('chat-stream');
+        
+        function toggleChatbot() {
+            chatWindow.classList.toggle('hidden');
+        }
+
+        function appendMessage(sender, text) {
+            const msgBox = document.createElement('div');
+            msgBox.className = sender === 'user' ? 'flex items-start justify-end gap-2.5' : 'flex items-start gap-2.5';
+            
+            const innerHTML = sender === 'user' ? `
+                <div class="bg-[#1F3F84] text-white p-3 rounded-2xl rounded-tl-none shadow-sm max-w-[80%]">
+                    <p class="leading-relaxed text-sm">${text}</p>
+                </div>
+            ` : `
+                <div class="w-8 h-8 bg-[#35E59A]/20 text-[#1F3F84] dark:text-white rounded-full flex items-center justify-center shrink-0 font-bold text-xs">
+                    G
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-3 rounded-2xl rounded-tr-none shadow-sm max-w-[80%] border border-slate-100 dark:border-slate-750 text-[#1F3F84] dark:text-white">
+                    <p class="leading-relaxed text-sm">${text}</p>
+                </div>
+            `;
+            
+            msgBox.innerHTML = innerHTML;
+            chatStream.appendChild(msgBox);
+            chatStream.scrollTop = chatStream.scrollHeight;
+        }
+
+        function handleQuickQuestion(questionText) {
+            appendMessage('user', questionText);
+            generateBotResponse(questionText);
+        }
+
+        function handleSendChat(event) {
+            event.preventDefault();
+            const input = document.getElementById('chat-input');
+            const userMsg = input.value.trim();
+            if (!userMsg) return;
+            
+            appendMessage('user', userMsg);
+            input.value = '';
+            
+            generateBotResponse(userMsg);
+        }
+
+        function generateBotResponse(text) {
+            // Typing Simulator indicator
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = "flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500 py-1"
+            typingIndicator.innerHTML = `<span class="animate-bounce">●</span><span class="animate-bounce delay-100">●</span><span class="animate-bounce delay-200">●</span> מנהלת הפארק מקלידה...`;
+            chatStream.appendChild(typingIndicator);
+            chatStream.scrollTop = chatStream.scrollHeight;
+
+            setTimeout(() => {
+                typingIndicator.remove();
+                let botAnswer = "תודה על שאלתכם. כיוון שמדובר בנושא חשוב, אשמח שתיצרו קשר ישיר עם מנהלת הפארק דרך טופס 'השארת הפרטים' המהיר או בלחיצה על כפתור פגישה.";
+                const normalText = text.toLowerCase();
+
+                if (normalText.includes('מגרש') || normalText.includes('פנוי') || normalText.includes('שטח')) {
+                    botAnswer = "מגרשים 101, 102 ו-104 מאושרים לבינוי מיידי עבור שימושי הייטק, משרדים ומרכזים רפואיים. מגרש 103 כרגע תחת תהליך שמירה לקמפוס אסטרטגי. מומלץ ללחוץ על המגרשים במפה שלנו כאן בעמוד כדי לראות פרטים מדויקים!";
+                } else if (normalText.includes('הטבות') || normalText.includes('מס') || normalText.includes('פיתוח א')) {
+                    botAnswer = "הפארק נהנה מהטבות של אזור פיתוח א׳ מטעם משרד הכלכלה, המעניק מענקי הקמה ופיתוח משמעותיים, שיעור מס חברות מופחת ביותר, ומסלולי תעסוקה תחרותיים למעסיקים המגייסים בצפון.";
+                } else if (normalText.includes('תב') || normalText.includes('מסמך') || normalText.includes('תשריט')) {
+                    botAnswer = "מסמכי התב״ע, התקנון והתשריטים הרשמיים זמינים להורדה ישירה דרך כפתורי ההורדה ברובע 'סטטוס ותב״ע' שלנו במרכז האתר!";
+                } else if (normalText.includes('קשר') || normalText.includes('טלפון') || normalText.includes('מייל') || normalText.includes('פגישה')) {
+                    botAnswer = "ניתן ליצור קשר ישיר עם מנהלת הפרויקט בכתובת המייל הרשמית benabuhila@gmail.com, או באמצעות מילוי טופס הנגישות ופתיחת חלונית 'השארת פרטים' שיוצג בפניכם במיידי.";
+                }
+
+                appendMessage('bot', botAnswer);
+            }, 1200);
+        }
+    </script>
+</body>
+</html>

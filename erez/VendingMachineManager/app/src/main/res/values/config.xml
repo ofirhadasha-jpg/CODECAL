@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Force UTF-8 for text rendering -->
+    <string name="default_encoding" translatable="false">UTF-8</string>
+    <!-- App default locale: Hebrew -->
+    <string name="default_locale" translatable="false">he</string>
+</resources>

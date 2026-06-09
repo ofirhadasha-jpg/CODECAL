@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Prolific USB-RS232 adapter -->
+    <usb-device vendor-id="0x067b" product-id="0x2303" />
+    <!-- FTDI -->
+    <usb-device vendor-id="0x0403" />
+    <!-- CH340 -->
+    <usb-device vendor-id="0x1a86" product-id="0x7523" />
+    <!-- Silicon Labs CP210x -->
+    <usb-device vendor-id="0x10c4" product-id="0xea60" />
+</resources>

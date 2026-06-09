@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VMM Manager</string>
+
+    <!-- Navigation tabs -->
+    <string name="nav_dashboard">דשבורד</string>
+    <string name="nav_products">מוצרים</string>
+    <string name="nav_machines">מכונות</string>
+    <string name="nav_transactions">עסקאות</string>
+
+    <!-- Dashboard -->
+    <string name="vmc_connected">VMC מחובר</string>
+    <string name="vmc_disconnected">VMC מנותק</string>
+    <string name="today_revenue">הכנסה היום</string>
+    <string name="today_transactions">עסקאות היום</string>
+    <string name="machine_status">סטטוס מכונה</string>
+    <string name="lbl_temperature">טמפ׳</string>
+    <string name="lbl_door">דלת</string>
+    <string name="lbl_microwave">מיקרוגל</string>
+    <string name="door_open">פתוחה</string>
+    <string name="door_closed">סגורה</string>
+    <string name="microwave_on">פעיל</string>
+    <string name="microwave_off">כבוי</string>
+    <string name="low_stock">מלאי נמוך</string>
+    <string name="all_products">כל המוצרים</string>
+    <string name="recent_transactions">עסקאות אחרונות</string>
+    <string name="see_all">הכל</string>
+    <string name="remaining">נותרו</string>
+    <string name="sync_label">סנכרן</string>
+
+    <!-- Product list -->
+    <string name="products_title">ניהול מוצרים</string>
+    <string name="add_product">הוסף מוצר</string>
+    <string name="search_product">חיפוש מוצר...</string>
+    <string name="cost_prefix">עלות: </string>
+    <string name="sale_prefix">מכירה: </string>
+    <string name="stock_prefix">מלאי: </string>
+    <string name="delete_product_title">מחיקת מוצר</string>
+    <string name="delete_product_confirm">האם למחוק את</string>
+    <string name="delete">מחק</string>
+    <string name="cancel">ביטול</string>
+    <string name="product_image">תמונת מוצר</string>
+
+    <!-- Add product form -->
+    <string name="add_product_title">הוספת מוצר חדש</string>
+    <string name="tap_add_image">לחץ להוספת תמונה</string>
+    <string name="image_specs">(800×560, רקע לבן)</string>
+    <string name="field_product_name">שם מוצר *</string>
+    <string name="field_barcode">ברקוד</string>
+    <string name="field_cost_price">מחיר עלות *</string>
+    <string name="field_sale_price">מחיר מכירה *</string>
+    <string name="btn_get_price">קבל הצעת מחיר מהשוק</string>
+    <string name="pricing_title">הצעת תמחור מהשוק</string>
+    <string name="min_price">מין׳:</string>
+    <string name="max_price">מקס׳:</string>
+    <string name="avg_price">ממוצע:</string>
+    <string name="suggested_price">מחיר מוצע:</string>
+    <string name="sources">מקורות:</string>
+    <string name="btn_save_product">שמור מוצר</string>
+    <string name="currency_symbol">₪</string>
+
+    <!-- Machine -->
+    <string name="machines_title">מכונות</string>
+    <string name="sync_all">סנכרן הכל</string>
+    <string name="status_online">מחובר</string>
+    <string name="status_offline">מנותק</string>
+    <string name="status_error">שגיאה</string>
+    <string name="status_maintenance">תחזוקה</string>
+
+    <!-- Transactions -->
+    <string name="transactions_title">עסקאות</string>
+    <string name="avg_label">ממוצע</string>
+
+    <!-- Notifications / SMS -->
+    <string name="notif_purchase_approved">רכישה אושרה</string>
+    <string name="notif_low_stock_title">מלאי נמוך – %1$s</string>
+    <string name="notif_low_stock_body">%1$s: נותרו %2$d יחידות</string>
+    <string name="notif_machine_error_title">שגיאת מכונה – %1$s</string>
+    <string name="notif_machine_error_body">קוד שגיאה: 0x%1$02X</string>
+
+    <!-- Validation -->
+    <string name="err_fill_required">מלא שם, מחיר עלות ומחיר מכירה</string>
+    <string name="product_saved">מוצר נשמר בהצלחה</string>
+    <string name="product_created">מוצר נוצר! מחיר מוצע: ₪%1$s</string>
+</resources>

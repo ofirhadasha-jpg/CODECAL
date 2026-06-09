@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base app theme. RTL layout direction for Hebrew UI -->
+    <style name="Theme.VmmManager" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:layoutDirection">rtl</item>
+        <item name="android:textDirection">rtl</item>
+        <item name="android:supportsRtl">true</item>
+    </style>
+</resources>
