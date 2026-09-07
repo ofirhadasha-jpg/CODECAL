@@ -679,13 +679,6 @@
                     | מועד אחרון להגשה | button "לפרטי המכרז"
                 -->
                 <div class="bg-slate-50 dark:bg-slate-800 rounded-3xl p-10 md:p-14 text-center border border-slate-100 dark:border-slate-700">
-                    <div class="w-16 h-16 mx-auto bg-slate-200 dark:bg-slate-700 rounded-full flex items-center justify-center mb-6 text-slate-400 dark:text-slate-300">
-                        <i data-lucide="clipboard-x" class="w-8 h-8"></i>
-                    </div>
-                    <p class="text-lg font-bold text-[#1F3F84] dark:text-white mb-2">אין מכרזים פעילים בשלב זה.</p>
-                    <p class="text-sm sm:text-base text-slate-500 dark:text-slate-400 mb-8 max-w-md mx-auto">
-                        השאירו פרטים ונעדכן אתכם עם פתיחת מכרזים והזדמנויות חדשות.
-                    </p>
                     <button onclick="openContactPage('בקשה לעדכון על מכרזים חדשים')" class="bg-[#35E59A] text-[#1F3F84] px-6 py-3.5 rounded-xl font-bold text-sm sm:text-base hover:bg-[#2bc483] transition-all inline-flex items-center gap-2">
                         <i data-lucide="bell" class="w-5 h-5"></i>
                         עדכנו אותי עם פתיחת מכרז חדש
@@ -1027,8 +1020,8 @@
     </div> <!-- End Main Wrapper -->
 
     <!-- DEDICATED IMMERSIVE CONTACT PAGE VIEW -->
-    <div id="contact-page-view" class="hidden fixed inset-0 z-[250] bg-slate-900/55 backdrop-blur-md overflow-y-auto flex items-center justify-center p-0 sm:p-4 md:p-6 transition-all duration-300">
-        <div class="bg-white dark:bg-slate-900 text-[#1F3F84] dark:text-white w-full max-w-5xl md:rounded-3xl shadow-2xl min-h-screen md:min-h-0 flex flex-col md:flex-row overflow-hidden border border-slate-100 dark:border-slate-800 animate-fade-in relative">
+    <div id="contact-page-view" class="hidden fixed inset-0 z-[250] bg-slate-900/55 backdrop-blur-md overflow-y-auto flex items-start justify-center p-0 sm:p-4 md:p-6 transition-all duration-300">
+        <div class="bg-white dark:bg-slate-900 text-[#1F3F84] dark:text-white w-full max-w-5xl md:rounded-3xl shadow-2xl min-h-screen md:min-h-0 flex flex-col md:flex-row overflow-hidden border border-slate-100 dark:border-slate-800 animate-fade-in relative md:my-6">
             
             <!-- Side Panel: Info & Marketing -->
             <div class="w-full md:w-5/12 bg-gradient-to-br from-[#1F3F84] to-[#132854] text-white p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
@@ -1093,8 +1086,8 @@
             <!-- Form Content Panel -->
             <div class="w-full md:w-7/12 p-8 md:p-12 flex flex-col justify-between relative bg-white dark:bg-slate-900">
                 
-                <!-- Close Button -->
-                <button onclick="closeContactPage()" class="absolute top-6 left-6 text-slate-400 hover:text-red-500 transition-colors p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800" title="סגור וחזור לאתר">
+                <!-- Close Button (fixed to viewport so it stays reachable even when the modal scrolls) -->
+                <button onclick="closeContactPage()" class="fixed top-4 left-4 sm:top-6 sm:left-6 z-10 bg-white/90 dark:bg-slate-800/90 shadow-md text-slate-400 hover:text-red-500 transition-colors p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700" title="סגור וחזור לאתר" aria-label="סגור טופס">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
 
